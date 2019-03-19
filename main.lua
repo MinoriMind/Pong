@@ -43,14 +43,14 @@ end
 
 	if circleX<=20+circleR then
 		if circleY+circleR < y_first+HigthOfRectangle and circleY+circleR > y_first then
-			circleVelocityX=circleVelocityX*-1.3
+			circleVelocityX=circleVelocityX*-1.2
 		else
 			isGameOver = true
 		end
 	end
 	if circleX>=780-circleR then
 		if circleY+circleR < y_second+HigthOfRectangle and circleY+circleR > y_second then
-			circleVelocityX=circleVelocityX*-1.3	
+			circleVelocityX=circleVelocityX*-1.2	
 		else
 			isGameOver = true
 		end
@@ -85,7 +85,7 @@ function love.draw ()
 if currentState == "menu" then
 	love.graphics.setBackgroundColor(242/255, 200/255, 220/255)
 	love.graphics.setColor(133/255,100/255,123/255)
-	love.graphics.print("Start", 400, 300)
+	love.graphics.print("Start", 375, 300)
 	if circleX>=700  then 
 	 	love.graphics.print("Game over. Right player lost", 200, 500)
 	end
