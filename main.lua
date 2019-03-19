@@ -1,8 +1,20 @@
+function love.mousepressed (_, _, button, _)
+	if button==1 and currentState=="menu" then 
+		currentState = "game"
+		circleVelocityX=2
+		circleVelocityY=2
+		circleX=400
+		circleY=300
+		y_second=0
+		y_first=0
+		isGameOver=false
+	end
+end
 function love.load ()
 	love.window.setMode (800, 600)
 	love.graphics.setNewFont(30)
 	y_second=0
-	velocity=2
+	velocity=4
 	y_first=0
 	HigthOfRectangle=90
 	circleX=400
@@ -12,9 +24,13 @@ function love.load ()
 	circleVelocityY=2
 	multy=1
 	isGameOver=false
+	currentState = "menu"
 end
 
 function love.update (dt)
+if currentState == "menu" then
+	return
+end
 	if isGameOver then 
 		return
 	end
@@ -27,14 +43,14 @@ function love.update (dt)
 
 	if circleX<=20+circleR then
 		if circleY+circleR < y_first+HigthOfRectangle and circleY+circleR > y_first then
-			circleVelocityX=circleVelocityX*-1
+			circleVelocityX=circleVelocityX*-1.3
 		else
 			isGameOver = true
 		end
 	end
 	if circleX>=780-circleR then
 		if circleY+circleR < y_second+HigthOfRectangle and circleY+circleR > y_second then
-			circleVelocityX=circleVelocityX*-1
+			circleVelocityX=circleVelocityX*-1.3	
 		else
 			isGameOver = true
 		end
@@ -66,16 +82,26 @@ function love.update (dt)
 end
 
 function love.draw ()
+if currentState == "menu" then
+	love.graphics.setBackgroundColor(242/255, 200/255, 220/255)
+	love.graphics.setColor(133/255,100/255,123/255)
+	love.graphics.print("Start", 400, 300)
+	if circleX>=700  then 
+	 	love.graphics.print("Game over. Right player lost", 200, 500)
+	end
+	if circleX <= 100 then
+		love.graphics.print("Game over. Left player lost", 200, 500)
+	end
+else
 	love.graphics.setBackgroundColor(242/255, 220/255, 224/255)
 	love.graphics.setColor(133/255,100/255,123/255)
 	love.graphics.rectangle("fill", 0, y_first, 20, HigthOfRectangle)
 	love.graphics.rectangle("fill", 780, y_second, 20, HigthOfRectangle)
 	love.graphics.setColor(133/255,100/255,123/255)
 	love.graphics.circle("fill", circleX, circleY, circleR)
-	if isGameOver
-	 then if circleX>=700 
-		then love.graphics.print("game over. right player lost", 200, 300)
-		else love.graphics.print("game over. left player lost", 200, 300)
-		end
+	if isGameOver then 
+		currentState = "menu"
+		
 	end
+end
 end
