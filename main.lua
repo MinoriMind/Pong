@@ -10,8 +10,7 @@ function love.mousepressed (_, _, button, _)
 		isGameOver=false
 	end
 end
-
-function love.touchmoved (_, x, y)
+function love.touchpressed (_, x, y)
 	if currentState=="menu" then 
 		currentState = "game"
 		circleVelocityX=2
@@ -37,9 +36,25 @@ function love.touchmoved (_, x, y)
 	end
 end
 
+function love.touchmoved (_, x, y)
+	if x<=windowWidth/2 then
+	y_first = y - HigthOfRectangle/2
+		if y<=HigthOfRectangle/2 then y_first=0
+		end
+		if y>=windowHigth-HigthOfRectangle/2 then y_first=windowHigth-HigthOfRectangle
+		end
+	else
+	y_second = y - HigthOfRectangle/2
+		if y<=HigthOfRectangle/2 then y_second=0
+		end
+		if y>=windowHigth-HigthOfRectangle/2 then y_second=windowHigth-HigthOfRectangle
+		end
+	end
+end
+
 function love.load ()
-	windowWidth, windowHigth = love.window.getDesktopDimensions(1)
-	love.window.setMode (windowWidth, windowHigth, {fullscreen = true})
+	windowWidth, windowHigth = love.graphics.getDimensions()
+	love.window.setMode (windowWidth, windowHigth)
 	love.graphics.setNewFont(30)
 	y_second=0
 	velocity=4
@@ -113,7 +128,7 @@ function love.draw ()
 if currentState == "menu" then
 	love.graphics.setBackgroundColor(242/255, 200/255, 220/255)
 	love.graphics.setColor(133/255,100/255,123/255)
-	love.graphics.print("Start", windowWidth/2, 300)
+	love.graphics.print("Start", windowWidth/2, windowHigth/2)
 	if circleX>=windowWidth-100  then 
 	 	love.graphics.print("Game over. Right player lost", windowWidth/3, windowHigth*5/6)
 	end
