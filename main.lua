@@ -10,6 +10,33 @@ function love.mousepressed (_, _, button, _)
 		isGameOver=false
 	end
 end
+
+function love.touchmoved (_, x, y)
+	if currentState=="menu" then 
+		currentState = "game"
+		circleVelocityX=2
+		circleVelocityY=2
+		circleX=400
+		circleY=300
+		y_second=0
+		y_first=0
+		isGameOver=false
+	end
+	if x<=400 then
+	y_first = y - HigthOfRectangle/2
+		if y<=HigthOfRectangle/2 then y_first=0
+		end
+		if y>=600-HigthOfRectangle/2 then y_first=600-HigthOfRectangle
+		end
+	else
+	y_second = y - HigthOfRectangle/2
+		if y<=HigthOfRectangle/2 then y_second=0
+		end
+		if y>=600-HigthOfRectangle/2 then y_second=600-HigthOfRectangle
+		end
+	end
+end
+
 function love.load ()
 	love.window.setMode (800, 600)
 	love.graphics.setNewFont(30)
@@ -28,9 +55,9 @@ function love.load ()
 end
 
 function love.update (dt)
-if currentState == "menu" then
-	return
-end
+	if currentState == "menu" then
+		return
+	end
 	if isGameOver then 
 		return
 	end
