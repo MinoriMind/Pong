@@ -3,8 +3,8 @@ function love.mousepressed (_, _, button, _)
 		currentState = "game"
 		circleVelocityX=2
 		circleVelocityY=2
-		circleX=400
-		circleY=300
+		circleX=windowWidth/2
+		circleY=windowHigth/2
 		y_second=0
 		y_first=0
 		isGameOver=false
@@ -16,36 +16,37 @@ function love.touchmoved (_, x, y)
 		currentState = "game"
 		circleVelocityX=2
 		circleVelocityY=2
-		circleX=400
-		circleY=300
+		circleX=windowWidth/2
+		circleY=windowHigth/2
 		y_second=0
 		y_first=0
 		isGameOver=false
 	end
-	if x<=400 then
+	if x<=windowWidth/2 then
 	y_first = y - HigthOfRectangle/2
 		if y<=HigthOfRectangle/2 then y_first=0
 		end
-		if y>=600-HigthOfRectangle/2 then y_first=600-HigthOfRectangle
+		if y>=windowHigth-HigthOfRectangle/2 then y_first=windowHigth-HigthOfRectangle
 		end
 	else
 	y_second = y - HigthOfRectangle/2
 		if y<=HigthOfRectangle/2 then y_second=0
 		end
-		if y>=600-HigthOfRectangle/2 then y_second=600-HigthOfRectangle
+		if y>=windowHigth-HigthOfRectangle/2 then y_second=windowHigth-HigthOfRectangle
 		end
 	end
 end
 
 function love.load ()
-	love.window.setMode (800, 600)
+	windowWidth, windowHigth = love.window.getDesktopDimensions(1)
+	love.window.setMode (windowWidth, windowHigth, {fullscreen = true})
 	love.graphics.setNewFont(30)
 	y_second=0
 	velocity=4
 	y_first=0
 	HigthOfRectangle=90
-	circleX=400
-	circleY=300
+	circleX=windowWidth/2
+	circleY=windowHigth/2
 	circleR=20
 	circleVelocityX=2
 	circleVelocityY=2
@@ -61,7 +62,7 @@ function love.update (dt)
 	if isGameOver then 
 		return
 	end
-	if circleY>=600-circleR then
+	if circleY>=windowHigth-circleR then
 		circleVelocityY=circleVelocityY*-1
 	end
 	if circleY<=circleR then
@@ -75,7 +76,7 @@ function love.update (dt)
 			isGameOver = true
 		end
 	end
-	if circleX>=780-circleR then
+	if circleX>=windowWidth-2*circleR then
 		if circleY+circleR < y_second+HigthOfRectangle and circleY+circleR > y_second then
 			circleVelocityX=circleVelocityX*-1.2	
 		else
@@ -91,7 +92,7 @@ function love.update (dt)
 			y_first=y_first-velocity*2*multy
 		end	
 	end
-	if y_first<600-HigthOfRectangle then
+	if y_first<windowHigth-HigthOfRectangle then
 		if love.keyboard.isDown ('down') then
 			y_first=y_first+velocity*2*multy
 		end
@@ -101,7 +102,7 @@ function love.update (dt)
 			y_second=y_second-velocity*2*multy
 		end
 	end
-	if y_second<600-HigthOfRectangle then
+	if y_second<windowHigth-HigthOfRectangle then
 		if love.keyboard.isDown ('s') then
 			y_second=y_second+velocity*2*multy
 		end	
@@ -112,18 +113,18 @@ function love.draw ()
 if currentState == "menu" then
 	love.graphics.setBackgroundColor(242/255, 200/255, 220/255)
 	love.graphics.setColor(133/255,100/255,123/255)
-	love.graphics.print("Start", 375, 300)
-	if circleX>=700  then 
-	 	love.graphics.print("Game over. Right player lost", 200, 500)
+	love.graphics.print("Start", windowWidth/2, 300)
+	if circleX>=windowWidth-100  then 
+	 	love.graphics.print("Game over. Right player lost", windowWidth/3, windowHigth*5/6)
 	end
-	if circleX <= 100 then
-		love.graphics.print("Game over. Left player lost", 200, 500)
+	if circleX <= windowHigth-100 then
+		love.graphics.print("Game over. Left player lost", windowWidth/3, windowHigth*5/6)
 	end
 else
 	love.graphics.setBackgroundColor(242/255, 220/255, 224/255)
 	love.graphics.setColor(133/255,100/255,123/255)
 	love.graphics.rectangle("fill", 0, y_first, 20, HigthOfRectangle)
-	love.graphics.rectangle("fill", 780, y_second, 20, HigthOfRectangle)
+	love.graphics.rectangle("fill", windowWidth-20, y_second, 20, HigthOfRectangle)
 	love.graphics.setColor(133/255,100/255,123/255)
 	love.graphics.circle("fill", circleX, circleY, circleR)
 	if isGameOver then 
