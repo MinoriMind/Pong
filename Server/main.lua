@@ -1,7 +1,9 @@
-PORT = 12345
 local socket = require('socket')
+local utils = require('utils')
+local net = require('net')
+
 local listening_socket = socket.tcp4()
-if listening_socket:bind('*', PORT) == 1 then
+if listening_socket:bind('*', net.port) == 1 then
     print("Success")
 else
     print("Error during bind")
@@ -12,25 +14,8 @@ else
     print("Error during listen")
 end
 
-local
-function clamp(min, val, max)
-    return math.max(min, math.min(val, max));
-end
-
-local
-function read_until_empty(socket)
-    local last_response = nil
-    local response, err = socket:receive("*l")
-
-    while response do
-        last_response = response
-        response, err = socket:receive("*l")
-    end
-
-    return last_response, err
-end
-
 local game = {}
+
 function love.load ()
 	window_width, window_height = love.graphics.getDimensions()
     server_state = "Waiting Players"
@@ -59,7 +44,7 @@ function love.update (dt)
 
     if server_state == "Game" then
         local game_state
-        local left_response, err = read_until_empty(left_socket)
+        local left_response, err = net.read_until_empty(left_socket)
 
         if left_response then
             command = string.sub(left_response, -1)
@@ -69,10 +54,10 @@ function love.update (dt)
             if command ==  's' then
                 game.players.left.y = game.players.left.y + PLAYER_VELOCITY
             end
-            game.players.left.y = clamp(0, game.players.left.y, window_height - PLAYER_HEIGHT)
+            game.players.left.y = utils.clamp(0, game.players.left.y, window_height - PLAYER_HEIGHT)
         end
 
-        local right_response, err = read_until_empty(right_socket)
+        local right_response, err = net.read_until_empty(right_socket)
 
         if right_response then
             command = string.sub(right_response, -1)
@@ -82,7 +67,7 @@ function love.update (dt)
             if command ==  's' then
                 game.players.right.y = game.players.right.y + PLAYER_VELOCITY
             end
-            game.players.right.y = clamp(0, game.players.right.y, window_height - PLAYER_HEIGHT)
+            game.players.right.y = utils.clamp(0, game.players.right.y, window_height - PLAYER_HEIGHT)
         end
 
         game.update_ball()

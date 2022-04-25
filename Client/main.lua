@@ -156,33 +156,9 @@ function love.load ()
             end))
 end
 
-PORT = 12345
+local net = require('net')
 local socket = require('socket')
 local tcp = socket.tcp4()
-local address, port = 'localhost', PORT
-
-local
-function split(s, delimiter)
-	result = {}
-	for match in (s..delimiter):gmatch("(.-)"..delimiter) do
-		table.insert(result, match)
-	end
-	return result
-end
-
-local
-function read_until_empty(socket)
-    local last_response = nil
-    local response, err = socket:receive("*l")
-
-    while response do
-        last_response = response
-        response, err = socket:receive("*l")
-    end
-
-    return last_response, err
-end
-
 
 function love.update (dt)
 	if game.current_state == "Main Menu" then
@@ -197,7 +173,7 @@ function love.update (dt)
 
     if game.current_state == "Trying To Connect" then
         tcp:settimeout(5)
-        if tcp:connect(address, port) == 1 then
+        if tcp:connect(net.address, net.port) == 1 then
             game.current_state = "Waiting For Player"
             tcp:settimeout(0)
         else
@@ -220,15 +196,15 @@ function love.update (dt)
     end
 
     if game.current_state == "Online Game" then
-        response, err = read_until_empty(tcp)
+        response, err = net.read_until_empty(tcp)
 
         if response then
             print(response)
-            local res = split(response, '=')
+            local res = utils.split(response, '=')
 
-            local ball = split(res[1], ':')
-            local left = split(res[2], ':')
-            local right = split(res[3], ':')
+            local ball = utils.split(res[1], ':')
+            local left = utils.split(res[2], ':')
+            local right = utils.split(res[3], ':')
 
             game.ball.x = ball[2]
             game.ball.y = ball[3]
