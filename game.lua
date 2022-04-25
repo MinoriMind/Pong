@@ -22,8 +22,8 @@ function game.reset_ball()
     game.ball.x = window_width/2
     game.ball.y = window_height/2
     -- TODO: random direction
-    game.ball.vx = 2
-    game.ball.vy = 2
+    game.ball.vx = 1
+    game.ball.vy = 1
     game.ball.radius = 20
 end
 
@@ -118,7 +118,7 @@ function game.update_players()
     if love.keyboard.isDown ('s') then
         game.players.left.y = game.players.left.y + PLAYER_VELOCITY
     end
-    game.players.left.y = clamp(0, game.players.left.y, window_height - PLAYER_HEIGHT)
+    game.players.left.y = clamp(0, game.players.left.y, window_height - game.players.left.height)
 
     if love.keyboard.isDown ('up') then
         game.players.right.y = game.players.right.y - PLAYER_VELOCITY
@@ -126,7 +126,7 @@ function game.update_players()
     if love.keyboard.isDown ('down') then
         game.players.right.y = game.players.right.y + PLAYER_VELOCITY
     end
-    game.players.right.y = clamp(0, game.players.right.y, window_height - PLAYER_HEIGHT)
+    game.players.right.y = clamp(0, game.players.right.y, window_height - game.players.right.height)
 end
 
 local
